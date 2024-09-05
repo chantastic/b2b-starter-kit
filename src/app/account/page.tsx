@@ -1,13 +1,12 @@
 import { getUser } from "@workos-inc/authkit-nextjs";
 import { Text, Heading, TextField, Flex, Box } from "@radix-ui/themes";
+import { UserFields } from "./user-fields";
+import { ConvexClientProvider } from "../convex-client-provider";
 
 export default async function AccountPage() {
   const { user, role, permissions } = await getUser({ ensureSignedIn: true });
 
-  const userFields = [
-    ["First name", user.firstName],
-    ["Last name", user.lastName],
-    ["Email", user.email],
+  const sessionFields = [
     role ? ["Role", role] : [],
     permissions ? ["Permissions", permissions] : [],
     ["Id", user.id],
@@ -24,23 +23,29 @@ export default async function AccountPage() {
         </Text>
       </Flex>
 
-      {userFields && (
-        <Flex direction="column" justify="center" gap="3" width="400px">
-          {userFields.map(([label, value]) => (
-            <Flex asChild align="center" gap="6" key={value}>
-              <label>
-                <Text weight="bold" size="3" style={{ width: 100 }}>
-                  {label}
-                </Text>
+      <Flex direction="column" justify="center" gap="3" width="400px">
+        <ConvexClientProvider>
+          <UserFields />
+        </ConvexClientProvider>
 
-                <Box flexGrow="1">
-                  <TextField.Root value={value || ""} readOnly />
-                </Box>
-              </label>
-            </Flex>
-          ))}
-        </Flex>
-      )}
+        {sessionFields && (
+          <>
+            {sessionFields.map(([label, value]) => (
+              <Flex asChild align="center" gap="6" key={value}>
+                <label>
+                  <Text weight="bold" size="3" style={{ width: 100 }}>
+                    {label}
+                  </Text>
+
+                  <Box flexGrow="1">
+                    <TextField.Root value={value || ""} readOnly />
+                  </Box>
+                </label>
+              </Flex>
+            ))}
+          </>
+        )}
+      </Flex>
     </>
   );
 }
