@@ -4,8 +4,9 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Text, TextField, Flex, Box } from "@radix-ui/themes";
 
-export function UserFields() {
-  const user = useQuery(api.user.get, {});
+export function UserFields({ userId }: { userId: string }) {
+  const user = useQuery(api.user.get, { userId });
+  console.log(userId);
 
   if (!user) return null;
 

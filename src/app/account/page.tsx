@@ -25,7 +25,7 @@ export default async function AccountPage() {
 
       <Flex direction="column" justify="center" gap="3" width="400px">
         <ConvexClientProvider>
-          <UserFields />
+          <UserFields userId={user.id} />
         </ConvexClientProvider>
 
         {sessionFields && (
